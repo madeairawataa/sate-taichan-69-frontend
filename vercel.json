@@ -1,14 +1,8 @@
 {
-  "version": 2,
   "rewrites": [
     {
       "source": "/(.*)",
       "destination": "/index.html"
     }
-  ],
-  "env": {
-    "REACT_APP_BACKEND_URL": "https://taichan69-backend.vercel.app"
-  },
-  "cleanUrls": true,
-  "trailingSlash": false
+  ]
 }
