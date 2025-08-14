@@ -1,11 +1,23 @@
 {
   "version": 2,
+  "builds": [
+    {
+      "src": "package.json",
+      "use": "@vercel/static-build",
+      "config": {
+        "distDir": "build"
+      }
+    }
+  ],
   "rewrites": [
     {
       "source": "/(.*)",
       "destination": "/index.html"
     }
   ],
+  "env": {
+    "REACT_APP_BACKEND_URL": "https://taichan69-backend.vercel.app"
+  },
   "cleanUrls": true,
   "trailingSlash": false
 }
