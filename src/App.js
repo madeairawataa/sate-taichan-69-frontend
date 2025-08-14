@@ -1,4 +1,3 @@
-// src/App.js
 import React, { useEffect, useState } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Home from './home/Home';
@@ -16,24 +15,24 @@ import ProtectedAdminRoute from './middleware/ProtectedAdminRoute';
 import ProtectedUserRoute from './middleware/ProtectedUserRoute';
 import History from './home/History';
 import NotificationAudio from './components/NotificationAudio';
-import io from 'socket.io-client';
 
 function App() {
   const [isAdmin, setIsAdmin] = useState(false);
 
   useEffect(() => {
-    if (!localStorage.getItem('userUUID')) {
-      const uuid = crypto.randomUUID();
-      localStorage.setItem('userUUID', uuid);
+    try {
+      // Generate UUID jika belum ada
+      if (!localStorage.getItem('userUUID')) {
+        const uuid = crypto.randomUUID();
+        localStorage.setItem('userUUID', uuid);
+      }
+
+      // Cek role admin
+      const role = localStorage.getItem('role');
+      setIsAdmin(role === 'admin');
+    } catch (error) {
+      console.error('Error in App useEffect:', error);
     }
-
-    const role = localStorage.getItem('role');
-    setIsAdmin(role === 'admin');
-
-    const socket = io('taichan69-backend.vercel.app');
-    window.socket = socket;
-
-    return () => socket.disconnect();
   }, []);
 
   return (
@@ -41,16 +40,16 @@ function App() {
       {isAdmin && <NotificationAudio />}
       <div className="App">
         <Routes>
-          {/* User */}
+          {/* User Routes */}
           <Route path="/" element={<Home />} />
           <Route path="/menu" element={<Menu />} />
           <Route path="/reservasi" element={<Reservasi />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
-          <Route path="/forgot-Password" element={<ForgotPassword />} />
+          <Route path="/forgot-password" element={<ForgotPassword />} />
           <Route path="/status" element={<StatusPesanan />} />
           <Route path="/history" element={<ProtectedUserRoute><History /></ProtectedUserRoute>} />
-          {/* Admin */}
+          {/* Admin Routes */}
           <Route path="/admin" element={<ProtectedAdminRoute><Dashboard /></ProtectedAdminRoute>} />
           <Route path="/admin/pesanan" element={<ProtectedAdminRoute><AdminDaftarPesanan /></ProtectedAdminRoute>} />
           <Route path="/admin/menu" element={<ProtectedAdminRoute><AdminKelolaMenu /></ProtectedAdminRoute>} />
