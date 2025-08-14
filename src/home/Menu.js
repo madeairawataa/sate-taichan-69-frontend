@@ -3,12 +3,6 @@ import { useNavigate } from 'react-router-dom';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import '../Styles/Menu.css';
-import io from 'socket.io-client';
-
-const socket = io('taichan69-backend.vercel.app', {
-  reconnectionAttempts: 5,
-  reconnectionDelay: 1000,
-});
 
 const defaultImage = '/images/default.jpg';
 
@@ -29,12 +23,18 @@ function Menu() {
   const navigate = useNavigate();
   const nomorPesanan = `ORD-${Date.now()}`;
 
-
   useEffect(() => {
     const fetchMenu = async () => {
       try {
-        const res = await fetch('taichan69-backend.vercel.app/menu');
-        if (!res.ok) throw new Error('Gagal mengambil data menu');
+        const res = await fetch(`${process.env.REACT_APP_BACKEND_URL}/menu`, {
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        });
+        if (!res.ok) {
+          const errorData = await res.json();
+          throw new Error(errorData.error || 'Gagal mengambil data menu');
+        }
         const data = await res.json();
 
         const init = {};
@@ -52,10 +52,6 @@ function Menu() {
       }
     };
     fetchMenu();
-
-    return () => {
-      socket.off('updatePesanan');
-    };
   }, []);
 
   const handleFilterKategori = (kategori) => {
@@ -137,8 +133,7 @@ function Menu() {
     };
 
     try {
-      console.log('Mengirim payload ke /buat-invoice:', payload);
-      const res = await fetch('taichan69-backend.vercel.app/api/pembayaran/buat-invoice', {
+      const res = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/pembayaran/buat-invoice`, {
         method: 'POST',
         headers: { 
           'Content-Type': 'application/json',
@@ -149,12 +144,16 @@ function Menu() {
         body: JSON.stringify(payload),
       });
 
-      const data = await res.json();
+      if (!res.ok) {
+        const data = await res.json();
+        throw new Error(data.error || 'Gagal membuat invoice.');
+      }
 
-      if (res.ok && data.invoiceUrl) {
+      const data = await res.json();
+      if (data.invoiceUrl) {
         window.location.href = data.invoiceUrl;
       } else {
-        throw new Error(data.error || 'Gagal membuat invoice.');
+        throw new Error('Invoice URL tidak ditemukan.');
       }
     } catch (err) {
       setError(err.message || 'Gagal menghubungkan ke server.');
