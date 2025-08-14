@@ -7,7 +7,7 @@ function AdminMenu({ socket }) {
   const [filter, setFilter] = useState('semua');
 
   const fetchPesanan = () => {
-    fetch('http://localhost:5000/api/pesanan/admin', {
+    fetch('taichan69-backend.vercel.app/api/pesanan/admin', {
       headers: {
         Authorization: `Bearer ${localStorage.getItem('token')}`,
       },
@@ -51,7 +51,7 @@ function AdminMenu({ socket }) {
   const handleUpdate = async (id) => {
     const newStatus = statusMap[id];
     try {
-      const res = await fetch(`http://localhost:5000/api/pesanan/${id}/status`, {
+      const res = await fetch(`taichan69-backend.vercel.app/api/pesanan/${id}/status`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -124,7 +124,7 @@ function AdminMenu({ socket }) {
     item.gambar
       ? item.gambar.startsWith('http')
         ? item.gambar
-        : `http://localhost:5000${item.gambar}`
+        : `taichan69-backend.vercel.app${item.gambar}`
       : 'https://via.placeholder.com/50'
   }
   alt={item.nama}

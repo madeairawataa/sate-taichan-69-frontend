@@ -114,7 +114,7 @@ function AdminKelolaMenu() {
   const [loading, setLoading] = useState(false);
   const formRef = useRef(null);
 
-  const API_URL = 'http://localhost:5000/menu';
+  const API_URL = 'taichan69-backend.vercel.app/menu';
 
   const fetchMenu = async () => {
     setLoading(true);

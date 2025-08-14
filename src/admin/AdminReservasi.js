@@ -9,7 +9,7 @@ function AdminReservasi({ socket, setTab }) {
   const statusList = ['semua', 'belum aktif', 'aktif', 'selesai'];
 
   const fetchData = () => {
-    fetch('http://localhost:5000/api/reservasi')
+    fetch('taichan69-backend.vercel.app/api/reservasi')
       .then((res) => res.json())
       .then((data) => {
         const hasil = Array.isArray(data) ? data : data.data;

@@ -7,7 +7,7 @@ import Footer from '../components/Footer';
 import '../Styles/Admin.css';
 
 // Socket client untuk real-time update (pesanan & reservasi)
-const socket = io('http://localhost:5000');
+const socket = io('taichan69-backend.vercel.app');
 
 function AdminDashboard() {
   const [tab, setTab] = useState('pesanan');

@@ -23,10 +23,10 @@ const Dashboard = () => {
       const query = `?periode=${filterWaktu}`;
 
       const [resRingkasan, resTransaksi, resFeedback, resStatistikMenu] = await Promise.all([
-        fetch(`http://localhost:5000/api/dashboard/ringkasan${query}`, { headers }),
-        fetch(`http://localhost:5000/api/dashboard/transaksi${query}`, { headers }),
-        fetch('http://localhost:5000/api/feedback', { headers }),
-        fetch(`http://localhost:5000/api/dashboard/statistik-menu${query}`, { headers }),
+        fetch(`taichan69-backend.vercel.app/api/dashboard/ringkasan${query}`, { headers }),
+        fetch(`taichan69-backend.vercel.app/api/dashboard/transaksi${query}`, { headers }),
+        fetch('taichan69-backend.vercel.app/api/feedback', { headers }),
+        fetch(`taichan69-backend.vercel.app/api/dashboard/statistik-menu${query}`, { headers }),
       ]);
 
       setRingkasan(await resRingkasan.json());
