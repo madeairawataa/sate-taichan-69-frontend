@@ -1,0 +1,506 @@
+/* === HALAMAN UTAMA RESERVASI === */
+
+.reservasi-page {
+  padding: 20px;
+  max-width: 1000px;
+  margin: auto;
+  transition: 0.3s ease;
+  background: transparent;
+  font-family: 'savate', sans-serif;
+}
+
+.reservasi-wrapper {
+  transition: 0.3s ease;
+}
+
+.reservasi-wrapper.blurred {
+  filter: blur(4px);
+  pointer-events: none;
+}
+
+h2.reservasi-title {
+  text-align: center;
+  margin-bottom: 20px;
+  color: #ffffff;
+  font-size: 28px;
+}
+
+/* === KARTU MEJA === */
+.reservasi-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 16px;
+  margin-bottom: 10vh;
+}
+
+.reservasi-card {
+  background: #fff8e1;
+  border: 3px solid #ff9800;
+  border-radius: 12px;
+  padding: 14px;
+  text-align: center;
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.15);
+}
+
+.reservasi-card img {
+  width: 100%;
+  height: 160px;
+  object-fit: cover;
+  border-radius: 8px;
+  margin-bottom: 10px;
+}
+
+.reservasi-card h4 {
+  font-size: 16px;
+  font-weight: bold;
+  color: #e65100;
+  margin-bottom: 5px;
+}
+
+.reservasi-card p {
+  font-size: 14px;
+  color: #ff5722;
+  margin-bottom: 10px;
+}
+
+.reservasi-btn {
+  background-color: #ce3d11;
+  color: white;
+  border: none;
+  padding: 8px 14px;
+  border-radius: 25px;
+  cursor: pointer;
+  font-size: 13px;
+  transition: 0.2s ease;
+}
+
+.reservasi-btn:hover {
+  background-color: #a72f0d;
+}
+
+/* === POPUP FORM === */
+.form-popup {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+  padding: 20px;
+}
+
+/* === FORM BOX === */
+.form-box {
+  background: #fff8e1;
+  padding: 25px;
+  border-radius: 12px;
+  width: 100%;
+  max-width: 450px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+  overflow-y: auto;
+  max-height: 90vh;
+  border: 3px solid #ff9800;
+  font-family: 'savate', sans-serif;
+}
+
+.form-box h3 {
+  text-align: center;
+  margin-bottom: 20px;
+  color: #e65100;
+  font-size: 1.5rem;
+}
+
+/* === INPUT, SELECT, TEXTAREA === */
+.form-box input,
+.form-box select,
+.form-box textarea {
+  width: 100%;
+  padding: 12px;
+  margin-bottom: 15px;
+  border: 2px solid #ff9800;
+  border-radius: 8px;
+  font-size: 14px;
+  font-family: 'savate', sans-serif;
+  background: #fffdf5;
+  transition: border 0.2s ease;
+}
+
+.form-box input:focus,
+.form-box textarea:focus,
+.form-box select:focus {
+  outline: none;
+  border-color: #ff5722;
+}
+
+/* === TOMBOL AKSI === */
+.form-actions {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.form-actions button {
+  flex: 1;
+  padding: 10px;
+  font-weight: bold;
+  font-size: 14px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-family: 'savate', sans-serif;
+}
+
+.form-actions button:first-child {
+  background-color: #28a745;
+  color: white;
+}
+
+.form-actions button:last-child {
+  background-color: #dc3545;
+  color: white;
+}
+
+.deposit-info-box {
+  background-color: #fff8e1;
+  border-left: 4px solid #ff9800;
+  padding: 14px 18px;
+  margin-top: 20px;
+  border-radius: 10px;
+  font-family: 'savate', sans-serif;
+  color: #4e342e;
+  font-size: 13px;
+  line-height: 1.6;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
+}
+
+.deposit-info-box h5 {
+  margin: 0 0 8px;
+  font-size: 14px;
+  color: #e65100;
+  font-weight: bold;
+}
+
+.deposit-info-box ul {
+  padding-left: 18px;
+  margin: 0;
+}
+
+.deposit-info-box li {
+  margin-bottom: 6px;
+}
+
+.grid-waktu {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+  margin-bottom: 15px;
+}
+
+.btn-waktu {
+  background-color: #fffdf5;
+  border: 2px solid #ff9800;
+  border-radius: 8px;
+  padding: 12px;
+  text-align: center;
+  font-size: 14px;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+.btn-waktu.selected {
+  background-color: #ff9800;
+  color: white;
+  font-weight: bold;
+}
+
+.btn-waktu:disabled {
+  background-color: #e0e0e0;
+  border-color: #b0b0b0;
+  color: #666;
+  cursor: not-allowed;
+}
+
+.reservasi-btn-group {
+  display: flex;
+  gap: 8px;
+  margin-top: 10px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.deskripsi-meja {
+  font-size: 13px;
+  color: #5d4037;
+  margin-top: 10px;
+  background: #fff7ed;
+  padding: 8px 10px;
+  border-radius: 8px;
+  border: 1px solid #e0c2a2;
+}
+
+/* === POPUP DESKRIPSI === */
+.popup-deskripsi-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 9999;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  backdrop-filter: blur(2px);
+}
+
+.popup-deskripsi-box {
+  background: #fff8e1;
+  padding: 25px;
+  border-radius: 12px;
+  width: 90%;
+  max-width: 400px;
+  text-align: justify;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+  border: 3px solid #ff9800;
+  animation: popupFade 0.25s ease-in-out;
+  font-family: 'savate', sans-serif;
+}
+
+.popup-deskripsi-box img {
+  width: 100%;
+  max-height: 180px;
+  object-fit: cover;
+  border-radius: 10px;
+  margin-bottom: 15px;
+}
+
+.popup-deskripsi-box h3 {
+  font-size: 1.8rem;
+  margin-bottom: 10px;
+  color: #e65100;
+}
+
+.popup-deskripsi-box p {
+  font-size: 14px;
+  color: #333;
+  margin-bottom: 15px;
+}
+
+.popup-deskripsi-box button {
+  background-color: #ce3d11;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: bold;
+  display: block;
+  margin: 0 auto;
+}
+
+@keyframes popupFade {
+  from {
+    transform: scale(0.85);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+/* === DETAIL RESERVASI === */
+.reservation-detail {
+  background: #fff8e1;
+  border: 3px solid #ff9800;
+  border-radius: 12px;
+  padding: 25px;
+  max-width: 600px;
+  margin: 20px auto;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+  font-family: 'savate', sans-serif;
+  color: #4e342e;
+}
+
+.reservation-detail h2 {
+  text-align: center;
+  color: #e65100;
+  margin-bottom: 20px;
+  font-size: 24px;
+}
+
+.reservation-detail p {
+  font-size: 16px;
+  margin-bottom: 10px;
+}
+
+.reservation-detail p strong {
+  color: #ff5722;
+}
+
+/* === CHECKBOX KETENTUAN === */
+.checkbox-ketentuan {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  margin-top: 15px;
+  font-size: 13px;
+  color: #4e342e;
+  line-height: 1.5;
+  max-width: 400px;
+}
+
+.checkbox-ketentuan input[type="checkbox"] {
+  margin-top: 4px;
+  flex-shrink: 0;
+  width: 16px;
+  height: 16px;
+  accent-color: #ff9800;
+  cursor: pointer;
+}
+
+.checkbox-ketentuan label {
+  display: block;
+}
+
+.reservation-detail {
+  display: flex;
+  flex-direction: row;
+  gap: 24px;
+  background-color: #fffdf6;
+  padding: 24px;
+  border-radius: 16px;
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.08);
+  max-width: 960px;
+  margin: 40px auto;
+  align-items: flex-start;
+  flex-wrap: wrap;
+}
+
+.reservation-img {
+  width: 100%;
+  max-width: 220px;
+  border-radius: 14px;
+  object-fit: cover;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
+}
+
+.reservation-info {
+  flex: 1;
+  min-width: 250px;
+}
+
+.reservation-info h2 {
+  font-size: 24px;
+  margin-bottom: 16px;
+  color: #e74c3c;
+  font-weight: 600;
+}
+
+.reservation-info p {
+  margin: 8px 0;
+  font-size: 16px;
+  color: #444;
+  line-height: 1.5;
+}
+
+.status-note {
+  font-family: 'savate', sans-serif; /* Ganti dengan 'Savate' jika tersedia */
+  font-size: 1rem;
+  color: #5c3a21; /* Coklat street-food vibe */
+  background-color: #f6eae0;
+  padding: 10px 14px;
+  border-left: 4px solid #d2691e;
+  margin-top: 12px;
+  border-radius: 4px;
+  box-shadow: 1px 1px 4px rgba(0, 0, 0, 0.05);
+}
+
+.loading-box {
+  padding: 40px;
+  background: white;
+  border-radius: 10px;
+  text-align: center;
+  margin: 50px auto;
+  width: fit-content;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+ .popup-overlay {
+          position: fixed;
+          top: 0; left: 0;
+          width: 100%;
+          height: 100%;
+          background: rgba(0,0,0,0.6);
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          z-index: 9999;
+        }
+        .popup-box {
+          background: white;
+          padding: 20px;
+          border-radius: 10px;
+          text-align: center;
+          max-width: 400px;
+          box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+          animation: fadeIn 0.3s ease-in-out;
+        }
+        .popup-box h2 {
+          margin-bottom: 10px;
+          color: #e65100;
+        }
+        .popup-box p {
+          font-size: 14px;
+          margin-bottom: 20px;
+        }
+        .popup-box button {
+          padding: 8px 16px;
+          background: #e65100;
+          color: white;
+          border: none;
+          border-radius: 5px;
+          cursor: pointer;
+        }
+        .popup-box button:hover {
+          background: #bf4600;
+        }
+        @keyframes fadeIn {
+          from { opacity: 0; transform: scale(0.95); }
+          to { opacity: 1; transform: scale(1); }
+        }
+
+@media (max-width: 768px) {
+  .reservation-detail {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .reservation-img {
+    max-width: 100%;
+  }
+
+  .reservation-info {
+    width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .popup-box {
+    max-width: 85%;        /* lebih kecil dari layar */
+    padding: 16px;         /* padding lebih kecil biar muat */
+    border-radius: 8px;    /* sudut sedikit lebih kecil */
+  }
+  .popup-box h2 {
+    font-size: 1.2rem;     /* judul lebih kecil */
+  }
+  .popup-box p {
+    font-size: 0.9rem;     /* teks lebih kecil */
+  }
+  .popup-box button {
+    font-size: 0.9rem;     /* tombol lebih kecil */
+    padding: 6px 12px;
+  }
+}

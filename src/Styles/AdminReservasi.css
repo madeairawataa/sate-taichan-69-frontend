@@ -1,0 +1,27 @@
+/* AdminReservasi.css */
+
+.status-state {
+  margin-top: 10px;
+  font-weight: bold;
+  padding: 5px 10px;
+  border-radius: 8px;
+  display: inline-block;
+  color: white;
+  font-size: 0.9rem;
+  width: fit-content;
+}
+
+/* Belum Aktif = Merah */
+.status-belum-aktif {
+  background-color: #e74c3c;
+}
+
+/* Aktif = Oranye */
+.status-aktif {
+  background-color: #f39c12;
+}
+
+/* Selesai = Hijau */
+.status-selesai {
+  background-color: #2ecc71;
+}

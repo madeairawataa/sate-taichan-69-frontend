@@ -1,0 +1,313 @@
+/* === Admin Layout === */
+.admin-dashboard {
+  padding: 20px;
+  max-width: 1000px;
+  margin: auto;
+  font-family: 'savate', sans-serif;
+}
+
+.admin-dashboard h2 {
+  text-align: center;
+  font-size: 28px;
+  color: white;
+  margin-bottom: 20px;
+}
+
+/* Tambahkan ini untuk center tombol filter */
+.admin-tabs {
+  display: flex;
+  gap: 16px;
+  justify-content: center; /* ✅ Center secara horizontal */
+  margin: 20px 0;
+}
+
+.admin-tabs button {
+  padding: 10px 20px;
+  background: #eee;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: 0.3s;
+}
+
+.admin-tabs button.active {
+  background: #ff4d00;
+  color: white;
+}
+
+.admin-content {
+  margin-top: 20px;
+}
+
+/* === Kontainer & Kartu Pesanan === */
+.admin-container {
+  padding: 20px;
+  max-width: 1000px;
+  margin: auto;
+  background: rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(6px);
+  border-radius: 12px;
+  margin-top: 30px;
+}
+
+.admin-container h2 {
+  text-align: center;
+  color: #fff;
+  margin-bottom: 30px;
+}
+
+.pesanan-card {
+  background: #fff;
+  border: 1px solid #ddd;
+  border-radius: 12px;
+  padding: 16px;
+  margin-bottom: 15px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.info p {
+  margin: 4px 0;
+}
+
+.actions {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.actions select {
+  padding: 6px 10px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+}
+
+.actions button {
+  background-color: #ff3e00;
+  color: white;
+  border: none;
+  padding: 8px 14px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: 0.2s ease;
+}
+
+.actions button:hover {
+  background-color: #cc2900;
+}
+
+.status-text {
+  font-weight: bold;
+  color: #333;
+}
+
+.no-data {
+  color: white;
+  text-align: center;
+}
+
+/* === Responsive === */
+@media (max-width: 768px) {
+  .pesanan-card {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .actions {
+    width: 100%;
+    justify-content: space-between;
+    flex-wrap: wrap;
+  }
+
+  .actions select,
+  .actions button {
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+  }
+
+  .actions button {
+    margin-top: 8px;
+  }
+
+  .admin-container {
+    padding: 16px;
+  }
+
+  .admin-container h2 {
+    font-size: 20px;
+  }
+
+  .info p {
+    font-size: 14px;
+  }
+}
+
+.admin-container {
+  padding: 20px;
+  max-width: 1000px;
+  margin: auto;
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(6px);
+  border-radius: 12px;
+  margin-top: 30px;
+}
+
+.admin-container h2 {
+  text-align: center;
+  color: #fff;
+  margin-bottom: 30px;
+}
+
+.admin-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 20px;
+}
+
+.admin-card {
+  background: #fff;
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.07);
+  transition: transform 0.2s;
+}
+
+.admin-card:hover {
+  transform: translateY(-3px);
+}
+
+.status-nama {
+  font-size: 18px;
+  font-weight: bold;
+  margin-bottom: 12px;
+  color: #2c3e50;
+}
+
+.status-info {
+  font-size: 14px;
+  margin-bottom: 6px;
+  color: #444;
+}
+
+.status-label {
+  font-weight: 600;
+  color: #000;
+}
+
+.status-items {
+  list-style: none;
+  padding: 0;
+  margin-top: 10px;
+}
+
+.status-item {
+  margin-bottom: 6px;
+}
+
+.status-item-image {
+  width: 50px;
+  height: 50px;
+  object-fit: cover;
+  border-radius: 8px;
+  margin-right: 10px;
+}
+
+.status-item-detail {
+  font-size: 14px;
+  color: #333;
+  line-height: 1.3;
+}
+
+.admin-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 12px;
+}
+
+.admin-actions select {
+  padding: 6px 10px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  flex: 1;
+}
+
+.admin-actions button {
+  background-color: #ff3e00;
+  color: white;
+  border: none;
+  padding: 8px 14px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: 0.2s ease;
+}
+
+.admin-actions button:hover {
+  background-color: #cc2900;
+}
+
+@media (max-width: 768px) {
+  .admin-container {
+    padding: 16px;
+  }
+
+  .admin-container h2 {
+    font-size: 20px;
+  }
+
+  .status-nama {
+    font-size: 16px;
+  }
+
+  .status-info {
+    font-size: 13px;
+  }
+
+  .admin-actions {
+    flex-direction: column;
+  }
+
+  .admin-actions select,
+  .admin-actions button {
+    width: 100%;
+  }
+}
+
+.status-state {
+  margin-top: 8px;
+  font-weight: bold;
+  font-size: 14px;
+  padding: 6px 12px;
+  border-radius: 6px;
+  display: inline-block;
+  background-color: #94a3b8;
+  color: white;
+}
+
+.status-menunggu {
+  background-color: #94a3b8;
+}
+
+.status-selesai {
+  background-color: #22c55e;
+}
+
+.status-dibatalkan {
+  background-color: #ef4444;
+}
+
+.notif-badge {
+  background-color: red;
+  color: white;
+  font-size: 12px;
+  border-radius: 10px;
+  padding: 2px 6px;
+  margin-left: 6px;
+  font-weight: bold;
+}

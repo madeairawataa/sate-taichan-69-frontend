@@ -1,0 +1,37 @@
+.admin-tabs.small-tabs {
+  display: flex;
+  overflow-x: auto;
+  gap: 8px;
+  padding: 10px 16px; /* padding kiri-kanan agar tidak mentok */
+  margin: 0 -16px 20px -16px; /* hilangkan padding container biar full */
+  scrollbar-width: none;
+}
+
+.admin-tabs.small-tabs::-webkit-scrollbar {
+  display: none;
+}
+
+.admin-tabs.small-tabs button {
+  flex: 0 0 auto;
+  padding: 6px 14px;
+  font-size: 14px;
+  background-color: #f1f1f1;
+  border: none;
+  border-radius: 20px;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.admin-tabs.small-tabs button.active {
+  background-color: #ff4d00;
+  color: white;
+  font-weight: bold;
+}
+
+@media (max-width: 480px) {
+  .admin-tabs.small-tabs button {
+    font-size: 13px;
+    padding: 6px 10px;
+  }
+}
