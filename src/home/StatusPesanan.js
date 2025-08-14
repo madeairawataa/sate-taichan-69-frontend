@@ -25,11 +25,11 @@ function StatusPesanan() {
       const userId = localStorage.getItem('userId');
       const uuid = localStorage.getItem('userUUID');
 
-      let url = `${process.env.REACT_APP_BACKEND_URL}/api/pesanan`;
+      let url = `https://taichan69-backend.vercel.app/api/pesanan`;
       const searchParams = new URLSearchParams(location.search);
       const orderId = searchParams.get('orderId');
       if (orderId) {
-        url = `${process.env.REACT_APP_BACKEND_URL}/api/pesanan/${orderId}`;
+        url = `https://taichan69-backend.vercel.app/api/pesanan/${orderId}`;
       } else if (userId) {
         url += `?userId=${userId}`;
       } else if (uuid) {
@@ -189,7 +189,7 @@ function StatusPesanan() {
 
   const handleFeedbackSubmit = async (pesananItem, feedback) => {
     try {
-      const res = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/feedback`, {
+      const res = await fetch(`https://taichan69-backend.vercel.app/api/feedback`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -228,7 +228,7 @@ function StatusPesanan() {
 
   const handleLogout = async () => {
     try {
-      const res = await fetch(`${process.env.REACT_APP_BACKEND_URL}/auth/logout`, {
+      const res = await fetch(`https://taichan69-backend.vercel.app/auth/logout`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -306,7 +306,7 @@ function StatusPesanan() {
                     {p.items.map((item, idx) => (
                       <li key={idx} className="status-item">
                         <img
-                          src={item.gambar?.startsWith('http') ? item.gambar : `${process.env.REACT_APP_BACKEND_URL}${item.gambar || '/images/no-image.png'}`}
+                          src={item.gambar?.startsWith('http') ? item.gambar : `https://taichan69-backend.vercel.app${item.gambar || '/images/no-image.png'}`}
                           alt={item.nama}
                           className="status-item-image"
                           onError={(e) => {

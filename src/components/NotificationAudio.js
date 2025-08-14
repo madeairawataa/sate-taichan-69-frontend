@@ -12,7 +12,7 @@ function NotificationAudio() {
     if (role !== 'admin') return;
 
     try {
-      const res = await fetch(`${process.env.REACT_APP_BACKEND_URL}/notifikasi/admin`, {
+      const res = await fetch(`https://taichan69-backend.vercel.app/notifikasi/admin`, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem('token')}`,
           'Content-Type': 'application/json',

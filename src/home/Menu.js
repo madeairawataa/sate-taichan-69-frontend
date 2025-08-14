@@ -26,7 +26,7 @@ function Menu() {
   useEffect(() => {
     const fetchMenu = async () => {
       try {
-        const res = await fetch(`${process.env.REACT_APP_BACKEND_URL}/menu`, {
+        const res = await fetch(`https://taichan69-backend.vercel.app/menu`, {
           headers: {
             'Content-Type': 'application/json',
           },
@@ -133,7 +133,7 @@ function Menu() {
     };
 
     try {
-      const res = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/pembayaran/buat-invoice`, {
+      const res = await fetch(`https://taichan69-backend.vercel.app/api/pembayaran/buat-invoice`, {
         method: 'POST',
         headers: { 
           'Content-Type': 'application/json',
