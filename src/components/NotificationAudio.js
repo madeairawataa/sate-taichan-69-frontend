@@ -1,14 +1,37 @@
-// src/components/NotificationAudio.js
 import React, { useEffect, useRef, useState } from 'react';
 import '../Styles/NotificationAudio.css';
-import { io } from 'socket.io-client';
-
-const socket = io('taichan69-backend.vercel.app');
 
 function NotificationAudio() {
   const [enabled, setEnabled] = useState(false);
   const [showPopup, setShowPopup] = useState(false);
-  const audioRef = useRef(null);
+  const audioRef = useRef(new Audio('/sounds/notifadmin.mp3'));
+  const prevNotifCount = useRef(0);
+
+  const fetchNotifikasi = async () => {
+    const role = localStorage.getItem('role');
+    if (role !== 'admin') return;
+
+    try {
+      const res = await fetch(`${process.env.REACT_APP_BACKEND_URL}/notifikasi/admin`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('token')}`,
+          'Content-Type': 'application/json',
+        },
+      });
+      if (!res.ok) throw new Error('Gagal mengambil notifikasi');
+      const data = await res.json();
+      const unread = data.filter((n) => !n.terbaca).length;
+      if (unread > prevNotifCount.current && enabled) {
+        audioRef.current.currentTime = 0;
+        audioRef.current.play().catch((err) => {
+          console.warn('Gagal play notifikasi:', err);
+        });
+      }
+      prevNotifCount.current = unread;
+    } catch (error) {
+      console.error('❌ Gagal ambil notifikasi:', error);
+    }
+  };
 
   useEffect(() => {
     const role = localStorage.getItem('role');
@@ -18,25 +41,17 @@ function NotificationAudio() {
       if (soundAllowed) {
         setEnabled(true);
       } else {
-        setShowPopup(true); // Tampilkan konfirmasi
+        setShowPopup(true);
       }
     }
   }, []);
 
   useEffect(() => {
-    if (!enabled) return;
-
-    const playSound = () => {
-      if (audioRef.current) {
-        audioRef.current.currentTime = 0;
-        audioRef.current.play().catch((err) => {
-          console.warn('Gagal play notifikasi:', err);
-        });
-      }
-    };
-
-    socket.on('notifikasi', playSound);
-    return () => socket.off('notifikasi', playSound);
+    if (enabled) {
+      fetchNotifikasi();
+      const interval = setInterval(fetchNotifikasi, 10000); // Polling setiap 10 detik
+      return () => clearInterval(interval);
+    }
   }, [enabled]);
 
   const handleEnable = () => {

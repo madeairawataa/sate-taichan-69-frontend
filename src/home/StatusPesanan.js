@@ -4,14 +4,7 @@ import '../Styles/StatusPesanan.css';
 import FeedbackPopup from '../home/FeedbackPopup';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
-import io from 'socket.io-client';
 import { generateStrukPesanan } from '../Utils/generateStruk';
-
-
-const socket = io('taichan69-backend.vercel.app', {
-  reconnectionAttempts: 5,
-  reconnectionDelay: 1000,
-});
 
 function StatusPesanan() {
   const [pesanan, setPesanan] = useState([]);
@@ -32,11 +25,11 @@ function StatusPesanan() {
       const userId = localStorage.getItem('userId');
       const uuid = localStorage.getItem('userUUID');
 
-      let url = 'taichan69-backend.vercel.app/api/pesanan';
+      let url = `${process.env.REACT_APP_BACKEND_URL}/api/pesanan`;
       const searchParams = new URLSearchParams(location.search);
       const orderId = searchParams.get('orderId');
       if (orderId) {
-        url = `taichan69-backend.vercel.app/api/pesanan/${orderId}`;
+        url = `${process.env.REACT_APP_BACKEND_URL}/api/pesanan/${orderId}`;
       } else if (userId) {
         url += `?userId=${userId}`;
       } else if (uuid) {
@@ -55,7 +48,10 @@ function StatusPesanan() {
           }),
         },
       });
-      if (!res.ok) throw new Error(`Gagal fetch: ${res.status} - ${res.statusText}`);
+      if (!res.ok) {
+        const data = await res.json();
+        throw new Error(data.error || `Gagal fetch: ${res.status} - ${res.statusText}`);
+      }
       const data = await res.json();
 
       if (orderId && data._id) {
@@ -116,7 +112,6 @@ function StatusPesanan() {
     }
   };
 
-  // Fungsi untuk download struk pesanan
   const handleDownloadStruk = (pesananItem) => {
     try {
       generateStrukPesanan(pesananItem);
@@ -173,11 +168,8 @@ function StatusPesanan() {
     }
 
     fetchPesanan();
-    socket.on('updatePesanan', fetchPesanan);
-
-    return () => {
-      socket.off('updatePesanan', fetchPesanan);
-    };
+    const interval = setInterval(fetchPesanan, 10000); // Polling setiap 10 detik
+    return () => clearInterval(interval);
   }, [navigate, location.search]);
 
   const getStatusClass = (status) => {
@@ -197,7 +189,7 @@ function StatusPesanan() {
 
   const handleFeedbackSubmit = async (pesananItem, feedback) => {
     try {
-      const res = await fetch('taichan69-backend.vercel.app/api/feedback', {
+      const res = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/feedback`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -236,7 +228,7 @@ function StatusPesanan() {
 
   const handleLogout = async () => {
     try {
-      await fetch('taichan69-backend.vercel.app/auth/logout', {
+      const res = await fetch(`${process.env.REACT_APP_BACKEND_URL}/auth/logout`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -245,6 +237,7 @@ function StatusPesanan() {
           }),
         },
       });
+      if (!res.ok) throw new Error('Gagal logout');
     } catch (err) {
       console.error('Error logout:', err);
     }
@@ -313,7 +306,7 @@ function StatusPesanan() {
                     {p.items.map((item, idx) => (
                       <li key={idx} className="status-item">
                         <img
-                          src={item.gambar?.startsWith('http') ? item.gambar : `taichan69-backend.vercel.app${item.gambar || '/images/no-image.png'}`}
+                          src={item.gambar?.startsWith('http') ? item.gambar : `${process.env.REACT_APP_BACKEND_URL}${item.gambar || '/images/no-image.png'}`}
                           alt={item.nama}
                           className="status-item-image"
                           onError={(e) => {
@@ -328,19 +321,18 @@ function StatusPesanan() {
                       </li>
                     ))}
                   </ul>
-              <div className="status-actions">
-                <p className={`status-state ${getStatusClass(p.status)}`}>
-                  Status: {p.status || 'Menunggu'}
-                </p>
-
-                <button 
-                  className="struk-btn" 
-                  onClick={() => handleDownloadStruk(p)}
-                  title="Download Struk Pesanan"
-                >
-                  📄 Download Struk
-                </button>
-              </div>
+                  <div className="status-actions">
+                    <p className={`status-state ${getStatusClass(p.status)}`}>
+                      Status: {p.status || 'Menunggu'}
+                    </p>
+                    <button 
+                      className="struk-btn" 
+                      onClick={() => handleDownloadStruk(p)}
+                      title="Download Struk Pesanan"
+                    >
+                      📄 Download Struk
+                    </button>
+                  </div>
                 </div>
               ))}
             </div>

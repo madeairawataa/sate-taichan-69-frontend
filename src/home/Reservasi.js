@@ -2,16 +2,10 @@ import React, { useEffect, useState } from 'react';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import '../Styles/Reservasi.css';
-import io from 'socket.io-client';
 import { v4 as uuidv4 } from 'uuid';
 import { generateStruk } from '../Utils/generateStruk';
 import jsPDF from 'jspdf';
 import 'jspdf-autotable';
-
-const socket = io('taichan69-backend.vercel.app', {
-  reconnectionAttempts: 5,
-  reconnectionDelay: 1000,
-});
 
 function Reservasi() {
   const [mejaList, setMejaList] = useState([]);
@@ -37,73 +31,73 @@ function Reservasi() {
     setujuKetentuan: false,
   });
 
-  const fetchReservationDetails = () => {
+  const fetchReservationDetails = async () => {
     const email = localStorage.getItem('email');
     if (email) {
-      fetch(`taichan69-backend.vercel.app/api/reservasi/by-email/${email}`)
-        .then((res) => res.json())
-        .then((data) => {
-          if (data && !data.error) {
-            setReservationDetails(data);
-            localStorage.setItem('reservationDetails', JSON.stringify(data));
-            if (!localStorage.getItem('popupShown')) {
-              setShowSuccessPopup(true);
-              localStorage.setItem('popupShown', 'true');
-            }
-          }
-        })
-        .catch(() => {
-          setReservationDetails(null);
+      try {
+        const res = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/reservasi/by-email/${email}`, {
+          headers: {
+            'Content-Type': 'application/json',
+          },
         });
+        if (!res.ok) throw new Error('Gagal mengambil detail reservasi');
+        const data = await res.json();
+        if (data && !data.error) {
+          setReservationDetails(data);
+          localStorage.setItem('reservationDetails', JSON.stringify(data));
+          if (!localStorage.getItem('popupShown')) {
+            setShowSuccessPopup(true);
+            localStorage.setItem('popupShown', 'true');
+          }
+        }
+      } catch (error) {
+        console.error('❌ Gagal ambil detail reservasi:', error);
+        setReservationDetails(null);
+      }
+    }
+  };
+
+  const fetchMejaList = async () => {
+    try {
+      const res = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/meja`, {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+      if (!res.ok) throw new Error('Gagal mengambil data meja');
+      const data = await res.json();
+      setMejaList(data);
+    } catch (err) {
+      console.error('Gagal ambil meja:', err);
+    }
+  };
+
+  const fetchBookedSlots = async () => {
+    if (formData.tanggal && selectedMeja) {
+      try {
+        const res = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/reservasi/cek-slot?tanggal=${formData.tanggal}&meja=${selectedMeja}`, {
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        });
+        if (!res.ok) throw new Error('Gagal cek slot');
+        const data = await res.json();
+        setBookedSlots(data);
+      } catch (err) {
+        console.error('Gagal cek slot:', err);
+        setBookedSlots([]);
+      }
     }
   };
 
   useEffect(() => {
     fetchReservationDetails();
-
-    fetch('taichan69-backend.vercel.app/api/meja')
-      .then((res) => res.json())
-      .then((data) => setMejaList(data))
-      .catch((err) => console.error('Gagal ambil meja:', err));
-  }, []);
-
-  useEffect(() => {
-    socket.on('updateReservasi', fetchReservationDetails);
-    return () => {
-      socket.off('updateReservasi', fetchReservationDetails);
-    };
-  }, []);
-
-  useEffect(() => {
-    if (formData.tanggal && selectedMeja) {
-      fetch(`taichan69-backend.vercel.app/api/reservasi/cek-slot?tanggal=${formData.tanggal}&meja=${selectedMeja}`)
-        .then((res) => res.json())
-        .then((data) => {
-          setBookedSlots(data);
-        })
-        .catch((err) => {
-          console.error('Gagal cek slot:', err);
-          setBookedSlots([]);
-        });
-    }
-  }, [formData.tanggal, selectedMeja]);
-
-  useEffect(() => {
-    const refreshBookedSlots = () => {
-      if (formData.tanggal && selectedMeja) {
-        fetch(`taichan69-backend.vercel.app/api/reservasi/cek-slot?tanggal=${formData.tanggal}&meja=${selectedMeja}`)
-          .then((res) => res.json())
-          .then((data) => {
-            setBookedSlots(data);
-          })
-          .catch((err) => console.error('Gagal refresh slot:', err));
-      }
-    };
-
-    socket.on('updateReservasi', refreshBookedSlots);
-    return () => {
-      socket.off('updateReservasi', refreshBookedSlots);
-    };
+    fetchMejaList();
+    const interval = setInterval(() => {
+      fetchReservationDetails();
+      fetchBookedSlots();
+    }, 10000); // Polling setiap 10 detik
+    return () => clearInterval(interval);
   }, [formData.tanggal, selectedMeja]);
 
   useEffect(() => {
@@ -168,10 +162,10 @@ function Reservasi() {
 
     try {
       localStorage.removeItem('popupShown');
-      localStorage.removeItem('popupFinishedShown'); // ✅ reset popup selesai
+      localStorage.removeItem('popupFinishedShown');
       localStorage.setItem('pendingReservasi', JSON.stringify(payload));
 
-      const res = await fetch('taichan69-backend.vercel.app/api/reservasi/invoice', {
+      const res = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/reservasi/invoice`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -179,10 +173,11 @@ function Reservasi() {
           payerEmail: formData.email,
           description: 'Reservasi Meja',
           amount: 25000,
-          successRedirectURL: `http://localhost:3000/reservasi?success=true&id=${uuid}`,
+          successRedirectURL: `${window.location.origin}/reservasi?success=true&id=${uuid}`,
         }),
       });
 
+      if (!res.ok) throw new Error('Gagal membuat invoice');
       const invoice = await res.json();
       window.location.href = invoice.invoice_url;
     } catch (err) {
@@ -209,25 +204,26 @@ function Reservasi() {
         setLoadingAfterPayment(true);
 
         try {
-          const res = await fetch('taichan69-backend.vercel.app/api/reservasi/buat-reservasi', {
+          const res = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/reservasi/buat-reservasi`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(pending),
           });
 
-          const result = await res.json();
-          if (!result.error) {
-            localStorage.setItem('reservationDetails', JSON.stringify(result));
-            setReservationDetails(result);
-            if (!localStorage.getItem('popupShown')) {
-              setShowSuccessPopup(true);
-              localStorage.setItem('popupShown', 'true');
-            }
-            localStorage.removeItem('pendingReservasi');
-            window.history.replaceState({}, '', '/reservasi');
-          } else {
-            console.error('Gagal simpan reservasi:', result.error);
+          if (!res.ok) {
+            const data = await res.json();
+            throw new Error(data.error || 'Gagal simpan reservasi');
           }
+
+          const result = await res.json();
+          setReservationDetails(result);
+          localStorage.setItem('reservationDetails', JSON.stringify(result));
+          if (!localStorage.getItem('popupShown')) {
+            setShowSuccessPopup(true);
+            localStorage.setItem('popupShown', 'true');
+          }
+          localStorage.removeItem('pendingReservasi');
+          window.history.replaceState({}, '', '/reservasi');
         } catch (err) {
           console.error('Error:', err);
         } finally {
@@ -243,7 +239,6 @@ function Reservasi() {
     <>
       <Navbar />
       <div className="reservasi-wrapper">
-        {/* ✅ Popup Success */}
         {showSuccessPopup && (
           <div className="popup-overlay">
             <div className="popup-box">
@@ -254,7 +249,6 @@ function Reservasi() {
           </div>
         )}
 
-        {/* ✅ Popup Reservasi Selesai */}
         {showFinishedPopup && (
           <div className="popup-overlay">
             <div className="popup-box">

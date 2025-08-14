@@ -1,57 +1,46 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import '../Styles/AdminMenu.css';
 
-function AdminMenu({ socket }) {
+function AdminMenu() {
   const [pesanan, setPesanan] = useState([]);
   const [statusMap, setStatusMap] = useState({});
   const [filter, setFilter] = useState('semua');
 
-  const fetchPesanan = () => {
-    fetch('taichan69-backend.vercel.app/api/pesanan/admin', {
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem('token')}`,
-      },
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        const hasil = Array.isArray(data) ? data : data.data;
-        setPesanan(hasil || []);
-        const initialStatus = {};
-        (hasil || []).forEach((p) => {
-          initialStatus[p._id] = p.status;
-        });
-        setStatusMap(initialStatus);
-      })
-      .catch((err) => {
-        console.error('❌ Gagal ambil data pesanan:', err);
-        setPesanan([]);
+  const fetchPesanan = async () => {
+    try {
+      const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/pesanan/admin`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('token')}`,
+          'Content-Type': 'application/json',
+        },
       });
+      if (!response.ok) {
+        throw new Error('Gagal mengambil data pesanan');
+      }
+      const data = await response.json();
+      const hasil = Array.isArray(data) ? data : data.data;
+      setPesanan(hasil || []);
+      const initialStatus = {};
+      (hasil || []).forEach((p) => {
+        initialStatus[p._id] = p.status;
+      });
+      setStatusMap(initialStatus);
+    } catch (err) {
+      console.error('❌ Gagal ambil data pesanan:', err);
+      setPesanan([]);
+    }
   };
 
   useEffect(() => {
     fetchPesanan();
-
-    if (socket) {
-      socket.on('updatePesanan', fetchPesanan);
-      socket.on('notifikasi', (data) => {
-        if (data.type === 'pesanan') {
-          fetchPesanan();
-        }
-      });
-    }
-
-    return () => {
-      if (socket) {
-        socket.off('updatePesanan');
-        socket.off('notifikasi');
-      }
-    };
-  }, [socket]);
+    const interval = setInterval(fetchPesanan, 10000); // Polling setiap 10 detik
+    return () => clearInterval(interval); // Bersihkan interval saat unmount
+  }, []);
 
   const handleUpdate = async (id) => {
     const newStatus = statusMap[id];
     try {
-      const res = await fetch(`taichan69-backend.vercel.app/api/pesanan/${id}/status`, {
+      const res = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/pesanan/${id}/status`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -65,10 +54,6 @@ function AdminMenu({ socket }) {
       setPesanan((prev) =>
         prev.map((p) => (p._id === updated._id ? { ...p, status: updated.status } : p))
       );
-
-      if (socket) {
-        socket.emit('updatePesanan');
-      }
     } catch (err) {
       alert('❌ Gagal mengupdate status');
     }
@@ -120,20 +105,19 @@ function AdminMenu({ socket }) {
                 {p.items.map((item, i) => (
                   <li key={i} className="status-item">
                     <img
-  src={
-    item.gambar
-      ? item.gambar.startsWith('http')
-        ? item.gambar
-        : `taichan69-backend.vercel.app${item.gambar}`
-      : 'https://via.placeholder.com/50'
-  }
-  alt={item.nama}
-  className="status-item-image"
-  onError={(e) => {
-    e.target.src = 'https://via.placeholder.com/50';
-  }}
-/>
-
+                      src={
+                        item.gambar
+                          ? item.gambar.startsWith('http')
+                            ? item.gambar
+                            : `${process.env.REACT_APP_BACKEND_URL}${item.gambar}`
+                          : 'https://via.placeholder.com/50'
+                      }
+                      alt={item.nama}
+                      className="status-item-image"
+                      onError={(e) => {
+                        e.target.src = 'https://via.placeholder.com/50';
+                      }}
+                    />
                     <div className="status-item-detail">
                       <strong>{item.nama}</strong> x {item.jumlah}
                       <br />

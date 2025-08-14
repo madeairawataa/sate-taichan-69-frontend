@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../Styles/Navbar.css';
-import { io } from 'socket.io-client';
 
 const Navbar = () => {
   const [username, setUsername] = useState(null);
@@ -26,12 +25,15 @@ const Navbar = () => {
   }, []);
 
   const fetchNotifikasi = async () => {
+    if (role !== 'admin') return;
     try {
-      const res = await fetch('taichan69-backend.vercel.app/notifikasi/admin', {
+      const res = await fetch(`${process.env.REACT_APP_BACKEND_URL}/notifikasi/admin`, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem('token')}`,
+          'Content-Type': 'application/json',
         },
       });
+      if (!res.ok) throw new Error('Gagal mengambil notifikasi');
       const data = await res.json();
       const list = data.map((n) => ({
         id: n._id,
@@ -51,18 +53,9 @@ const Navbar = () => {
   useEffect(() => {
     if (role === 'admin') {
       fetchNotifikasi();
+      const interval = setInterval(fetchNotifikasi, 10000); // Polling setiap 10 detik
+      return () => clearInterval(interval);
     }
-  }, [role]);
-
-  useEffect(() => {
-    if (role !== 'admin') return;
-
-    const socket = io('taichan69-backend.vercel.app');
-    socket.on('notifikasi', () => {
-      fetchNotifikasi();
-    });
-
-    return () => socket.disconnect();
   }, [role]);
 
   const handleToggleNotifBox = async () => {
@@ -71,13 +64,14 @@ const Navbar = () => {
 
     if (next) {
       try {
-        await fetch('taichan69-backend.vercel.app/notifikasi/admin/terbaca', {
+        const res = await fetch(`${process.env.REACT_APP_BACKEND_URL}/notifikasi/admin/terbaca`, {
           method: 'PUT',
           headers: {
             'Content-Type': 'application/json',
             Authorization: `Bearer ${localStorage.getItem('token')}`,
           },
         });
+        if (!res.ok) throw new Error('Gagal update notifikasi terbaca');
         await fetchNotifikasi();
       } catch (err) {
         console.error('❌ Gagal update notifikasi terbaca:', err);
@@ -88,30 +82,27 @@ const Navbar = () => {
   const handleLogout = async () => {
     setIsLoggingOut(true);
     try {
-      await fetch('taichan69-backend.vercel.app/auth/logout', {
+      const res = await fetch(`${process.env.REACT_APP_BACKEND_URL}/auth/logout`, {
         method: 'POST',
         headers: {
+          'Content-Type': 'application/json',
           Authorization: `Bearer ${localStorage.getItem('token')}`,
         },
       });
+      if (!res.ok) throw new Error('Gagal logout');
 
-      // Hapus semua data autentikasi dari localStorage
       localStorage.removeItem('token');
       localStorage.removeItem('username');
       localStorage.removeItem('role');
       localStorage.removeItem('adminSoundEnabled');
-      localStorage.removeItem('userId'); // Pastikan userId juga dihapus
-      // Hapus semua data lain yang mungkin tersimpan (opsional)
-      // localStorage.clear(); // Gunakan ini jika ingin hapus semua, tapi hati-hati karena akan hapus reservationDetails juga
+      localStorage.removeItem('userId');
 
-      // Reset state aplikasi
       setUsername(null);
       setRole(null);
       setNotifList([]);
       setNotifCount(0);
       setShowNotifBox(false);
 
-      // Redirect ke halaman utama
       navigate('/');
     } catch (error) {
       console.error('❌ Gagal logout:', error);
@@ -182,12 +173,13 @@ const Navbar = () => {
                       <button
                         onClick={async () => {
                           try {
-                            await fetch('taichan69-backend.vercel.app/notifikasi/admin', {
+                            const res = await fetch(`${process.env.REACT_APP_BACKEND_URL}/notifikasi/admin`, {
                               method: 'DELETE',
                               headers: {
                                 Authorization: `Bearer ${localStorage.getItem('token')}`,
                               },
                             });
+                            if (!res.ok) throw new Error('Gagal menghapus notifikasi');
                             setNotifList([]);
                             setNotifCount(0);
                           } catch (err) {

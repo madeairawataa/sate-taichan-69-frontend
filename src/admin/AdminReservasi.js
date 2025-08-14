@@ -1,30 +1,37 @@
-// src/admin/AdminReservasi.js
 import React, { useEffect, useState } from 'react';
 import '../Styles/AdminReservasi.css';
 
-function AdminReservasi({ socket, setTab }) {
+function AdminReservasi({ setTab }) {
   const [reservasi, setReservasi] = useState([]);
   const [filter, setFilter] = useState('semua');
 
   const statusList = ['semua', 'belum aktif', 'aktif', 'selesai'];
 
-  const fetchData = () => {
-    fetch('taichan69-backend.vercel.app/api/reservasi')
-      .then((res) => res.json())
-      .then((data) => {
-        const hasil = Array.isArray(data) ? data : data.data;
-        setReservasi(hasil || []);
-      })
-      .catch(() => setReservasi([]));
+  const fetchData = async () => {
+    try {
+      const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/reservasi`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('token')}`,
+          'Content-Type': 'application/json',
+        },
+      });
+      if (!response.ok) {
+        throw new Error('Gagal mengambil data reservasi');
+      }
+      const data = await response.json();
+      const hasil = Array.isArray(data) ? data : data.data;
+      setReservasi(hasil || []);
+    } catch (error) {
+      console.error('❌ Gagal ambil data reservasi:', error);
+      setReservasi([]);
+    }
   };
 
   useEffect(() => {
     fetchData();
-    socket.on('updateReservasi', fetchData);
-    return () => {
-      socket.off('updateReservasi', fetchData);
-    };
-  }, [socket]);
+    const interval = setInterval(fetchData, 10000); // Polling setiap 10 detik
+    return () => clearInterval(interval); // Bersihkan interval saat unmount
+  }, []);
 
   const filtered =
     filter === 'semua'

@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState } from 'react';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import '../Styles/AdminDashboard.css';
@@ -19,15 +19,22 @@ const Dashboard = () => {
   const fetchDashboardData = async () => {
     try {
       const token = localStorage.getItem('token');
-      const headers = { Authorization: `Bearer ${token}` };
+      const headers = { 
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json',
+      };
       const query = `?periode=${filterWaktu}`;
 
       const [resRingkasan, resTransaksi, resFeedback, resStatistikMenu] = await Promise.all([
-        fetch(`taichan69-backend.vercel.app/api/dashboard/ringkasan${query}`, { headers }),
-        fetch(`taichan69-backend.vercel.app/api/dashboard/transaksi${query}`, { headers }),
-        fetch('taichan69-backend.vercel.app/api/feedback', { headers }),
-        fetch(`taichan69-backend.vercel.app/api/dashboard/statistik-menu${query}`, { headers }),
+        fetch(`${process.env.REACT_APP_BACKEND_URL}/api/dashboard/ringkasan${query}`, { headers }),
+        fetch(`${process.env.REACT_APP_BACKEND_URL}/api/dashboard/transaksi${query}`, { headers }),
+        fetch(`${process.env.REACT_APP_BACKEND_URL}/api/feedback`, { headers }),
+        fetch(`${process.env.REACT_APP_BACKEND_URL}/api/dashboard/statistik-menu${query}`, { headers }),
       ]);
+
+      if (!resRingkasan.ok || !resTransaksi.ok || !resFeedback.ok || !resStatistikMenu.ok) {
+        throw new Error('Gagal mengambil data dashboard');
+      }
 
       setRingkasan(await resRingkasan.json());
       const resTransaksiJson = await resTransaksi.json();
@@ -41,18 +48,8 @@ const Dashboard = () => {
 
   useEffect(() => {
     fetchDashboardData();
-
-    if (window.socket) {
-      window.socket.on('pesanan:baru', fetchDashboardData);
-      window.socket.on('updatePesanan', fetchDashboardData);
-    }
-
-    return () => {
-      if (window.socket) {
-        window.socket.off('pesanan:baru', fetchDashboardData);
-        window.socket.off('updatePesanan', fetchDashboardData);
-      }
-    };
+    const interval = setInterval(fetchDashboardData, 10000); // Polling setiap 10 detik
+    return () => clearInterval(interval); // Bersihkan interval saat unmount
   }, [filterWaktu]);
 
   const labelFilter = {
@@ -236,7 +233,6 @@ const Dashboard = () => {
                 tickFormatter={(value) => value.toLocaleString('id-ID')}
               />
               <Tooltip content={<CustomTooltip />} />
-              {/* Hapus <Legend> untuk menghilangkan "Total" */}
               <Bar dataKey="total" fill="#fd6e00ff" radius={[8, 8, 0, 0]} barSize={30} />
             </BarChart>
           </ResponsiveContainer>
