@@ -1,11 +1,15 @@
 {
   "rewrites": [
     {
+      "source": "/api/:path*",
+      "destination": "http://70.153.136.221:5000/:path*"
+    },
+    {
       "source": "/(.*)",
       "destination": "/index.html"
     }
   ],
   "env": {
-    "REACT_APP_BACKEND_URL": "http://70.153.136.221:5000"
-  }
+    "REACT_APP_BACKEND_URL": "/api"
+  }
 }
