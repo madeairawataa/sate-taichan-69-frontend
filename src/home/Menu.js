@@ -26,7 +26,7 @@ function Menu() {
   useEffect(() => {
     const fetchMenu = async () => {
       try {
-        const res = await fetch(`http://70.153.136.221:5000/menu`, {
+        const res = await fetch(`${process.env.REACT_APP_BACKEND_URL}/menu`, {
           headers: {
             'Content-Type': 'application/json',
           },
