@@ -8,7 +8,7 @@ function AdminMenu() {
 
   const fetchPesanan = async () => {
     try {
-      const response = await fetch(`api/api/pesanan/admin`, {
+      const response = await fetch(`/api/api/pesanan/admin`, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem('token')}`,
           'Content-Type': 'application/json',
@@ -40,7 +40,7 @@ function AdminMenu() {
   const handleUpdate = async (id) => {
     const newStatus = statusMap[id];
     try {
-      const res = await fetch(`api//api/pesanan/${id}/status`, {
+      const res = await fetch(`/api/api/pesanan/${id}/status`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
