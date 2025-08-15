@@ -25,7 +25,7 @@ function StatusPesanan() {
       const userId = localStorage.getItem('userId');
       const uuid = localStorage.getItem('userUUID');
 
-      let url = `/api/pesanan`;
+      let url = `/api/api/pesanan`;
       const searchParams = new URLSearchParams(location.search);
       const orderId = searchParams.get('orderId');
       if (orderId) {
@@ -189,7 +189,7 @@ function StatusPesanan() {
 
   const handleFeedbackSubmit = async (pesananItem, feedback) => {
     try {
-      const res = await fetch(`/api/feedback`, {
+      const res = await fetch(`/api/api/feedback`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

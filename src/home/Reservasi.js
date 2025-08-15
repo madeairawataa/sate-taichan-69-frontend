@@ -35,7 +35,7 @@ function Reservasi() {
     const email = localStorage.getItem('email');
     if (email) {
       try {
-        const res = await fetch(`/api/reservasi/by-email/${email}`, {
+        const res = await fetch(`api/api/reservasi/by-email/${email}`, {
           headers: {
             'Content-Type': 'application/json',
           },
@@ -59,7 +59,7 @@ function Reservasi() {
 
   const fetchMejaList = async () => {
     try {
-      const res = await fetch(`/api/meja`, {
+      const res = await fetch(`api/api/meja`, {
         headers: {
           'Content-Type': 'application/json',
         },
@@ -75,7 +75,7 @@ function Reservasi() {
   const fetchBookedSlots = async () => {
     if (formData.tanggal && selectedMeja) {
       try {
-        const res = await fetch(`/api/reservasi/cek-slot?tanggal=${formData.tanggal}&meja=${selectedMeja}`, {
+        const res = await fetch(`api/api/reservasi/cek-slot?tanggal=${formData.tanggal}&meja=${selectedMeja}`, {
           headers: {
             'Content-Type': 'application/json',
           },
@@ -165,7 +165,7 @@ function Reservasi() {
       localStorage.removeItem('popupFinishedShown');
       localStorage.setItem('pendingReservasi', JSON.stringify(payload));
 
-      const res = await fetch(`/api/reservasi/invoice`, {
+      const res = await fetch(`api/api/reservasi/invoice`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -204,7 +204,7 @@ function Reservasi() {
         setLoadingAfterPayment(true);
 
         try {
-          const res = await fetch(`/api/reservasi/buat-reservasi`, {
+          const res = await fetch(`api/api/reservasi/buat-reservasi`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(pending),
