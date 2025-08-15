@@ -39,7 +39,7 @@ function Home() {
   useEffect(() => {
     const fetchFeedback = async () => {
       try {
-        const res = await axios.get('/api/feedback');
+        const res = await axios.get('/api/api/feedback');
         const formatted = res.data.map(item => ({
           text: item.komentar || `Rating: ${item.rating}`,
           name: item.namaPemesan || 'Anonim',
