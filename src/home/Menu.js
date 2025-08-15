@@ -136,7 +136,7 @@ function Menu() {
     };
 
     try {
-      const res = await fetch(`http://70.153.136.221:5000/api/pembayaran/buat-invoice`, {
+      const res = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/pembayaran/buat-invoice`, {
         method: 'POST',
         headers: { 
           'Content-Type': 'application/json',
