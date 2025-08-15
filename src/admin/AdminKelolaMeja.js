@@ -18,7 +18,7 @@ function AdminKelolaMeja() {
 
   const fetchMeja = async () => {
     try {
-      const res = await fetch(`api/api/meja`, {
+      const res = await fetch(`/api/api/meja`, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem('token')}`,
         },
