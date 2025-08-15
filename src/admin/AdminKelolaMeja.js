@@ -18,7 +18,7 @@ function AdminKelolaMeja() {
 
   const fetchMeja = async () => {
     try {
-      const res = await fetch('http://70.153.136.221:5000/api/meja', {
+      const res = await fetch('/api/meja', {
         headers: {
           Authorization: `Bearer ${localStorage.getItem('token')}`,
         },
@@ -76,8 +76,8 @@ function AdminKelolaMeja() {
 
     try {
       const endpoint = editingId
-        ? `http://70.153.136.221:5000/api/meja/${editingId}`
-        : 'http://70.153.136.221:5000/api/meja';
+        ? `/api/meja/${editingId}`
+        : '/api/meja';
       const method = editingId ? 'PUT' : 'POST';
 
       const res = await fetch(endpoint, {
@@ -116,7 +116,7 @@ function AdminKelolaMeja() {
   const handleDelete = async (id) => {
     if (!window.confirm('Yakin ingin menghapus meja ini?')) return;
     try {
-      const res = await fetch(`http://70.153.136.221:5000/api/meja/${id}`, {
+      const res = await fetch(`/api/meja/${id}`, {
         method: 'DELETE',
         headers: {
           Authorization: `Bearer ${localStorage.getItem('token')}`,

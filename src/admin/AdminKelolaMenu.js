@@ -114,7 +114,7 @@ function AdminKelolaMenu() {
   const [loading, setLoading] = useState(false);
   const formRef = useRef(null);
 
-  const API_URL = 'http://70.153.136.221:5000/menu';
+  const API_URL = '/api/menu';
 
   const fetchMenu = async () => {
     setLoading(true);
