@@ -29,7 +29,7 @@ function StatusPesanan() {
       const searchParams = new URLSearchParams(location.search);
       const orderId = searchParams.get('orderId');
       if (orderId) {
-        url = `/api/pesanan/${orderId}`;
+        url = `/api/api/pesanan/${orderId}`;
       } else if (userId) {
         url += `?userId=${userId}`;
       } else if (uuid) {
@@ -306,7 +306,7 @@ function StatusPesanan() {
                     {p.items.map((item, idx) => (
                       <li key={idx} className="status-item">
                         <img
-                          src={item.gambar?.startsWith('http') ? item.gambar : `/api/${item.gambar || '/images/no-image.png'}`}
+                          src={item.gambar?.startsWith('http') ? item.gambar : `/api${item.gambar || '/images/no-image.png'}`}
                           alt={item.nama}
                           className="status-item-image"
                           onError={(e) => {
