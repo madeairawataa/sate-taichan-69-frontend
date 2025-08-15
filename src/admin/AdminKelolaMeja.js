@@ -18,7 +18,7 @@ function AdminKelolaMeja() {
 
   const fetchMeja = async () => {
     try {
-      const res = await fetch('api/api/meja', {
+      const res = await fetch(`api/meja`, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem('token')}`,
         },
@@ -76,7 +76,7 @@ function AdminKelolaMeja() {
 
     try {
       const endpoint = editingId
-        ? 'api/api/meja/${editingId}'
+        ? `api/api/meja/${editingId}`
         : 'api/api/meja';
       const method = editingId ? 'PUT' : 'POST';
 
