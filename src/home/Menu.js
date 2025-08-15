@@ -136,7 +136,7 @@ function Menu() {
     };
 
     try {
-      const res = await fetch(`/api/pembayaran/buat-invoice`, {
+      const res = await fetch(`/api/api/pembayaran/buat-invoice`, {
         method: 'POST',
         headers: { 
           'Content-Type': 'application/json',
