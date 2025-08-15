@@ -32,7 +32,7 @@ const Register = () => {
     }
 
     try {
-      const res = await fetch('https://taichan69-backend.vercel.app/auth/register-request', {
+      const res = await fetch('http://70.153.136.221:5000/auth/register-request', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -59,7 +59,7 @@ const Register = () => {
     setIsLoading(true); // mulai loading
 
     try {
-      const res = await fetch('https://taichan69-backend.vercel.app/auth/register-verify', {
+      const res = await fetch('http://70.153.136.221:5000/auth/register-verify', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email: formData.email, otp }),

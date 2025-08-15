@@ -39,7 +39,7 @@ function Home() {
   useEffect(() => {
     const fetchFeedback = async () => {
       try {
-        const res = await axios.get('https://taichan69-backend.vercel.app/api/feedback');
+        const res = await axios.get('http://70.153.136.221:5000/api/feedback');
         const formatted = res.data.map(item => ({
           text: item.komentar || `Rating: ${item.rating}`,
           name: item.namaPemesan || 'Anonim',

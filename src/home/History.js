@@ -17,7 +17,7 @@ function History() {
       const token = localStorage.getItem('token');
       if (!token) throw new Error('User belum login.');
 
-      const res = await fetch('https://taichan69-backend.vercel.app/api/history', {
+      const res = await fetch('http://70.153.136.221:5000/api/history', {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -72,7 +72,7 @@ function History() {
 
   const handleFetchDetail = async (orderId) => {
     try {
-      const res = await fetch(`https://taichan69-backend.vercel.app/api/pesanan/${orderId}`);
+      const res = await fetch(`http://70.153.136.221:5000/api/pesanan/${orderId}`);
       if (!res.ok) throw new Error('Gagal mengambil detail pesanan');
 
       const data = await res.json();
@@ -147,7 +147,7 @@ function History() {
                       src={
                         item.gambar?.startsWith('http')
                           ? item.gambar
-                          : `https://taichan69-backend.vercel.app${item.gambar || '/images/no-image.png'}`
+                          : `http://70.153.136.221:5000${item.gambar || '/images/no-image.png'}`
                       }
                       alt={item.nama}
                       className="item-thumbnail-history"

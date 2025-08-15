@@ -6,6 +6,6 @@
     }
   ],
   "env": {
-    "REACT_APP_BACKEND_URL": "https://taichan69-backend.vercel.app"
+    "REACT_APP_BACKEND_URL": "http://70.153.136.221:5000"
   }
 }

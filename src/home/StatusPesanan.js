@@ -25,11 +25,11 @@ function StatusPesanan() {
       const userId = localStorage.getItem('userId');
       const uuid = localStorage.getItem('userUUID');
 
-      let url = `https://taichan69-backend.vercel.app/api/pesanan`;
+      let url = `http://70.153.136.221:5000/api/pesanan`;
       const searchParams = new URLSearchParams(location.search);
       const orderId = searchParams.get('orderId');
       if (orderId) {
-        url = `https://taichan69-backend.vercel.app/api/pesanan/${orderId}`;
+        url = `http://70.153.136.221:5000/api/pesanan/${orderId}`;
       } else if (userId) {
         url += `?userId=${userId}`;
       } else if (uuid) {
@@ -189,7 +189,7 @@ function StatusPesanan() {
 
   const handleFeedbackSubmit = async (pesananItem, feedback) => {
     try {
-      const res = await fetch(`https://taichan69-backend.vercel.app/api/feedback`, {
+      const res = await fetch(`http://70.153.136.221:5000/api/feedback`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -228,7 +228,7 @@ function StatusPesanan() {
 
   const handleLogout = async () => {
     try {
-      const res = await fetch(`https://taichan69-backend.vercel.app/auth/logout`, {
+      const res = await fetch(`http://70.153.136.221:5000/auth/logout`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -306,7 +306,7 @@ function StatusPesanan() {
                     {p.items.map((item, idx) => (
                       <li key={idx} className="status-item">
                         <img
-                          src={item.gambar?.startsWith('http') ? item.gambar : `https://taichan69-backend.vercel.app${item.gambar || '/images/no-image.png'}`}
+                          src={item.gambar?.startsWith('http') ? item.gambar : `http://70.153.136.221:5000${item.gambar || '/images/no-image.png'}`}
                           alt={item.nama}
                           className="status-item-image"
                           onError={(e) => {
