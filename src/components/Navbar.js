@@ -27,7 +27,7 @@ const Navbar = () => {
   const fetchNotifikasi = async () => {
     if (role !== 'admin') return;
     try {
-      const res = await fetch(`http://70.153.136.221:5000/notifikasi/admin`, {
+      const res = await fetch(`/api/notifikasi/admin`, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem('token')}`,
           'Content-Type': 'application/json',
@@ -64,7 +64,7 @@ const Navbar = () => {
 
     if (next) {
       try {
-        const res = await fetch(`http://70.153.136.221:5000/notifikasi/admin/terbaca`, {
+        const res = await fetch(`/api/notifikasi/admin/terbaca`, {
           method: 'PUT',
           headers: {
             'Content-Type': 'application/json',
@@ -82,7 +82,7 @@ const Navbar = () => {
   const handleLogout = async () => {
     setIsLoggingOut(true);
     try {
-      const res = await fetch(`http://70.153.136.221:5000/auth/logout`, {
+      const res = await fetch(`/api/auth/logout`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -173,7 +173,7 @@ const Navbar = () => {
                       <button
                         onClick={async () => {
                           try {
-                            const res = await fetch(`http://70.153.136.221:5000/notifikasi/admin`, {
+                            const res = await fetch(`/api/notifikasi/admin`, {
                               method: 'DELETE',
                               headers: {
                                 Authorization: `Bearer ${localStorage.getItem('token')}`,
