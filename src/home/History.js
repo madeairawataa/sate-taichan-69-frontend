@@ -17,7 +17,7 @@ function History() {
       const token = localStorage.getItem('token');
       if (!token) throw new Error('User belum login.');
 
-      const res = await fetch('/api/history', {
+      const res = await fetch('/api/api/history', {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -72,7 +72,7 @@ function History() {
 
   const handleFetchDetail = async (orderId) => {
     try {
-      const res = await fetch(`/api/pesanan/${orderId}`);
+      const res = await fetch(`/api/api/pesanan/${orderId}`);
       if (!res.ok) throw new Error('Gagal mengambil detail pesanan');
 
       const data = await res.json();
@@ -147,7 +147,7 @@ function History() {
                       src={
                         item.gambar?.startsWith('http')
                           ? item.gambar
-                          : `/api/${item.gambar || '/images/no-image.png'}`
+                          : `/api${item.gambar || '/images/no-image.png'}`
                       }
                       alt={item.nama}
                       className="item-thumbnail-history"
