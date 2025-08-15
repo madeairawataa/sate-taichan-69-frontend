@@ -17,7 +17,7 @@ const ForgotPassword = () => {
     setError('');
     setLoading(true);
     try {
-      const res = await fetch('http://70.153.136.221:5000/auth/forgot-password-request', {
+      const res = await fetch('/api/auth/forgot-password-request', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email }),
@@ -38,7 +38,7 @@ const ForgotPassword = () => {
     setError('');
     setLoading(true);
     try {
-      const res = await fetch('http://70.153.136.221:5000/auth/forgot-password-verify', {
+      const res = await fetch('/api/auth/forgot-password-verify', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, otp }),
@@ -64,7 +64,7 @@ const ForgotPassword = () => {
 
     setLoading(true);
     try {
-      const res = await fetch('http://70.153.136.221:5000/auth/reset-password', {
+      const res = await fetch('/api/auth/reset-password', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, newPassword, confirmPassword }),

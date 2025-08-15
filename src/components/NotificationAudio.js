@@ -12,7 +12,7 @@ function NotificationAudio() {
     if (role !== 'admin') return;
 
     try {
-      const res = await fetch(`http://70.153.136.221:5000/notifikasi/admin`, {
+      const res = await fetch(`/api/notifikasi/admin`, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem('token')}`,
           'Content-Type': 'application/json',
