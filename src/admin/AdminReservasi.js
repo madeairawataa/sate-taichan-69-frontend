@@ -9,7 +9,7 @@ function AdminReservasi({ setTab }) {
 
   const fetchData = async () => {
     try {
-      const response = await fetch(`/api/reservasi`, {
+      const response = await fetch(`api/api/reservasi`, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem('token')}`,
           'Content-Type': 'application/json',
