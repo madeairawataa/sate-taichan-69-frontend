@@ -26,10 +26,10 @@ const Dashboard = () => {
       const query = `?periode=${filterWaktu}`;
 
       const [resRingkasan, resTransaksi, resFeedback, resStatistikMenu] = await Promise.all([
-        fetch(`/api/dashboard/ringkasan${query}`, { headers }),
-        fetch(`/api/dashboard/transaksi${query}`, { headers }),
-        fetch(`/api/feedback`, { headers }),
-        fetch(`/api/dashboard/statistik-menu${query}`, { headers }),
+        fetch(`/api/api/dashboard/ringkasan${query}`, { headers }),
+        fetch(`/api/api/dashboard/transaksi${query}`, { headers }),
+        fetch(`/api/api/feedback`, { headers }),
+        fetch(`/api/api/dashboard/statistik-menu${query}`, { headers }),
       ]);
 
       if (!resRingkasan.ok || !resTransaksi.ok || !resFeedback.ok || !resStatistikMenu.ok) {
