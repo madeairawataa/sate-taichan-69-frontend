@@ -24,35 +24,38 @@ function Menu() {
   const nomorPesanan = `ORD-${Date.now()}`;
 
   useEffect(() => {
-    const fetchMenu = async () => {
-      try {
-        const res = await fetch(`${process.env.REACT_APP_BACKEND_URL}/menu`, {
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        });
-        if (!res.ok) {
-          const errorData = await res.json();
-          throw new Error(errorData.error || 'Gagal mengambil data menu');
-        }
-        const data = await res.json();
+  const fetchMenu = async () => {
+    try {
+      const res = await fetch(`${process.env.REACT_APP_BACKEND_URL}/menu`, {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
 
-        const init = {};
-        data.forEach((item) => {
-          if (item && item._id) {
-            init[item._id] = 0;
-          }
-        });
-
-        setMakanan(data);
-        setPesanan(init);
-      } catch (err) {
-        console.error('Error fetching menu:', err);
-        setError('Gagal memuat menu. Silakan coba lagi.');
+      if (!res.ok) {
+        const errorData = await res.json();
+        throw new Error(errorData.error || 'Gagal mengambil data menu');
       }
-    };
-    fetchMenu();
-  }, []);
+
+      const data = await res.json();
+
+      const init = {};
+      data.forEach((item) => {
+        if (item && item._id) {
+          init[item._id] = 0;
+        }
+      });
+
+      setMakanan(data);
+      setPesanan(init);
+    } catch (err) {
+      console.error('Error fetching menu:', err);
+      setError('Gagal memuat menu. Silakan coba lagi.');
+    }
+  };
+
+  fetchMenu();
+}, []);
 
   const handleFilterKategori = (kategori) => {
     setKategoriAktif(kategori);
