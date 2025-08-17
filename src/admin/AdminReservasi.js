@@ -61,6 +61,7 @@ function AdminReservasi({ setTab }) {
           filtered.map((r) => (
             <div className="admin-card" key={r._id}>
               <div className="status-nama"><strong>{r.nama}</strong></div>
+              <div className="status-info">No Reservasi: {r.noReservasi}</div>
               <div className="status-info">Meja: {r.meja}</div>
               <div className="status-info">Tanggal: {new Date(r.tanggalReservasi).toLocaleDateString()}</div>
               <div className="status-info">Waktu: {r.waktu}</div>
